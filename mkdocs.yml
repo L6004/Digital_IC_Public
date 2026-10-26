@@ -1,0 +1,72 @@
+site_name: 数字 IC · 知识与实践
+site_description: 经过审核的数字 IC 学习资料与实践记录
+site_url: https://l6004.github.io/Digital_IC_Public/
+repo_url: https://github.com/L6004/Digital_IC_Public
+repo_name: GitHub · 公开资料
+edit_uri: ''
+docs_dir: docs
+site_dir: site
+use_directory_urls: true
+nav:
+- 首页: index.md
+- 分类检索: library.md
+- 随手记:
+  - 10_inbox/index.md
+- 专题知识库:
+  - 20_topics/index.md
+- 工程案例:
+  - 30_cases/index.md
+- 可复用参考:
+  - 40_reference/index.md
+- 本科课程:
+  - 50_courses/index.md
+theme:
+  name: material
+  language: zh
+  font: false
+  features:
+  - navigation.tabs
+  - navigation.sections
+  - navigation.top
+  - navigation.indexes
+  - content.code.copy
+  - search.suggest
+  - search.highlight
+  palette:
+  - scheme: slate
+    primary: custom
+    accent: custom
+    toggle:
+      icon: material/brightness-4
+      name: 切换浅色
+  - scheme: default
+    primary: custom
+    accent: custom
+    toggle:
+      icon: material/brightness-7
+      name: 切换深色
+plugins:
+- search
+markdown_extensions:
+- admonition
+- attr_list
+- md_in_html
+- toc:
+    permalink: true
+- pymdownx.highlight:
+    pygments_lang_class: true
+    anchor_linenums: true
+    linenums: true
+- pymdownx.inlinehilite
+- pymdownx.superfences
+- pymdownx.tasklist:
+    custom_checkbox: true
+- pymdownx.details
+- pymdownx.tabbed:
+    alternate_style: true
+extra:
+  generator: false
+extra_css:
+- assets/stylesheets/knowledge.css
+extra_javascript:
+- assets/javascripts/code-blocks.js
