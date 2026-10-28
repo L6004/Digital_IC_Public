@@ -27,6 +27,10 @@
   --md-code-hl-variable-color: #9cdcfe;
   --code-border: #323b49;
   --code-header: #232b36;
+  --code-label: #aeb8c6;
+  --code-control: #b6c4d3;
+  --code-control-hover: #fff;
+  --code-line-number: #7e8999;
 }
 [data-md-color-scheme="slate"] {
   color-scheme: dark;
@@ -59,6 +63,28 @@
   --md-typeset-table-color: #d9d0c1;
   --md-typeset-table-color--light: #3e627807;
   --md-accent-fg-color: #345d78;
+  --md-code-bg-color: #eee9df;
+  --md-code-fg-color: #303844;
+  --md-code-hl-color: #3e62781a;
+  --md-code-hl-color--light: #3e62780d;
+  --md-code-hl-number-color: #476438;
+  --md-code-hl-special-color: #795b25;
+  --md-code-hl-function-color: #795b25;
+  --md-code-hl-constant-color: #176582;
+  --md-code-hl-keyword-color: #7a426e;
+  --md-code-hl-string-color: #8b4e34;
+  --md-code-hl-name-color: #345d78;
+  --md-code-hl-operator-color: #303844;
+  --md-code-hl-punctuation-color: #303844;
+  --md-code-hl-comment-color: #526d48;
+  --md-code-hl-generic-color: #303844;
+  --md-code-hl-variable-color: #345d78;
+  --code-border: #d5cec1;
+  --code-header: #e4ded3;
+  --code-label: #566473;
+  --code-control: #566473;
+  --code-control-hover: #294758;
+  --code-line-number: #59636e;
 }
 .md-header, .md-tabs { background: #3e6278; color: #f2f2ef; }
 .md-search__form { background-color: #21394966; }
@@ -97,18 +123,18 @@
   left: 80px;
   right: 50px;
   text-align: center;
-  color: #aeb8c6;
+  color: var(--code-label);
   font: 12px/20px var(--md-code-font);
   pointer-events: none;
 }
 .md-typeset .highlight pre { margin: 0; border-top: 1px solid var(--code-border); }
-.md-typeset .highlight .filename { color: #b6c4d3; background: var(--md-code-bg-color); border-bottom-color: var(--code-border); font-family: var(--md-code-font); }
+.md-typeset .highlight .filename { color: var(--code-control); background: var(--md-code-bg-color); border-bottom-color: var(--code-border); font-family: var(--md-code-font); }
 .md-typeset .highlight pre > code { padding: 16px 18px; line-height: 1.7; }
 .md-typeset .highlight .md-code__nav { top: -32px; }
-.md-typeset .highlight .md-code__button { color: #b6c4d3; }
-.md-typeset .highlight .md-code__button:hover { color: #fff; }
+.md-typeset .highlight .md-code__button { color: var(--code-control); }
+.md-typeset .highlight .md-code__button:hover { color: var(--code-control-hover); }
 .md-typeset .highlight .linenos {
-  color: #7e8999;
+  color: var(--code-line-number);
   background: transparent;
   user-select: none;
 }

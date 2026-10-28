@@ -10,10 +10,10 @@
     "docs/40_reference/index.md": "b8995bb5751c68d9960a8637a15da9910568cee0451fe1c0a72fbacaeeb346e5",
     "docs/50_courses/index.md": "455a0bb72b7894423f674ffc08136d853b8d5442f9d3e304630fdd21963d76d7",
     "docs/assets/javascripts/code-blocks.js": "b94026c73f00a89c2e78aef65313f4997b742bdcbb32d8ce886a7fa0710afe89",
-    "docs/assets/stylesheets/knowledge.css": "6a9d58c65ed05c93d9818105e54fca814a626ed56e9fcb755d6abd8820c83134",
-    "docs/index.md": "3eec9c328d80e941bf3f44c58d3b6aca9267200b12d5b9758fb7e1fcc3be9922",
+    "docs/assets/stylesheets/knowledge.css": "f87e7245103be16cecf901c6be431b430ae880502d2b94436a4ff40830f609b5",
+    "docs/index.md": "fd8f8c84ca653b47a58dad3b5fcacb40932a73aec476944db327ed9dd03f5d5b",
     "docs/library.md": "82848faea7de4ea4dd0414691edc09836d53f63e12dbda3aac72a2e7c6e9a574",
-    "mkdocs.yml": "afd4152deca5a40be7eee03c6e9b77d8a1324c705007c721278c5a0f01919317",
+    "mkdocs.yml": "238a1884a82d2c567d96bd7dc07736a58cf54b5a218fe978f333282dd8f00725",
     "README.md": "4d2152f30207d861962ba3e1ca07b1f81e23cd4edcb35eff93def92ef2591ec2",
     "requirements.txt": "9a8a3e701e55ced4ab689c351622edde8831d42ee722cea15b1456cbe439f696"
   }
