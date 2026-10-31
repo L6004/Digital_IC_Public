@@ -64,9 +64,22 @@ markdown_extensions:
 - pymdownx.details
 - pymdownx.tabbed:
     alternate_style: true
+- pymdownx.arithmatex:
+    generic: true
+- footnotes
+- def_list
+- pymdownx.caret
+- pymdownx.mark
+- pymdownx.tilde
 extra:
   generator: false
+  polyfills:
+  - assets/vendor/mermaid/mermaid.min.js
 extra_css:
 - assets/stylesheets/knowledge.css
 extra_javascript:
 - assets/javascripts/code-blocks.js
+- assets/javascripts/math.js
+- assets/vendor/mathjax/tex-chtml-full.js
+hooks:
+- hooks/markdown_rendering.py
