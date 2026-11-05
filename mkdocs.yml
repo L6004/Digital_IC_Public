@@ -77,9 +77,12 @@ extra:
   - assets/vendor/mermaid/mermaid.min.js
 extra_css:
 - assets/stylesheets/knowledge.css
+- assets/stylesheets/course-viewer.css
 extra_javascript:
 - assets/javascripts/code-blocks.js
 - assets/javascripts/math.js
 - assets/vendor/mathjax/tex-chtml-full.js
+- assets/vendor/code-viewer/viewer.js
 hooks:
 - hooks/markdown_rendering.py
+- hooks/course_pages.py

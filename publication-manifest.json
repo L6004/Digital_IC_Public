@@ -13,7 +13,7 @@
     "docs/assets/stylesheets/knowledge.css": "f87e7245103be16cecf901c6be431b430ae880502d2b94436a4ff40830f609b5",
     "docs/index.md": "fd8f8c84ca653b47a58dad3b5fcacb40932a73aec476944db327ed9dd03f5d5b",
     "docs/library.md": "82848faea7de4ea4dd0414691edc09836d53f63e12dbda3aac72a2e7c6e9a574",
-    "mkdocs.yml": "a595cb7ce19e5f9176546e3441a3258560bcdff8295535f5cebf634293cc556d",
+    "mkdocs.yml": "357ff213fe3ec5b8db6724ccdb89eb6daba36939d8dfc2564820afc2242e25b4",
     "README.md": "4d2152f30207d861962ba3e1ca07b1f81e23cd4edcb35eff93def92ef2591ec2",
     "requirements.txt": "9a8a3e701e55ced4ab689c351622edde8831d42ee722cea15b1456cbe439f696",
     "docs/assets/javascripts/math.js": "2dd8e3849b212d1f0288a8fb7c84566d71e7fdc608bfb5d821c4ef8afd89d8bd",
@@ -47,6 +47,14 @@
     "docs/assets/vendor/mermaid/mermaid.min.js": "198b19442f86f0b46a17e56d3abf744c3a28a3427e66fa8dada3b589a77babcc",
     "docs/assets/vendor/mermaid/VERSION": "215dbc43fe317191465acb7b1af2f714487f306c72926be785f4740396c11c7b",
     "hooks/markdown_rendering.py": "80d5a41c4031a2e69e5fca48576621204ed04f09f15c43c89810b28c584a7c43",
-    ".gitattributes": "218fff0b98914fd8e084ac5905beafa95ecb64fd45589233827b07597f938779"
+    ".gitattributes": "218fff0b98914fd8e084ac5905beafa95ecb64fd45589233827b07597f938779",
+    "docs/assets/stylesheets/course-viewer.css": "810ead69ef71a311fa56589fa9414d78f268a6cf46462e449e84c037ec159bf4",
+    "docs/assets/vendor/code-viewer/viewer.js": "81cb34bd92f0f7987aacaa50d74e9073d4027cf2d78953a85fda1ef510696dd7",
+    "docs/assets/vendor/code-viewer/LICENSES.txt": "68ce0d596f102d28600d72cabc42cd95911fed1fec4e9039c2c655a72924fd38",
+    "COURSE_DISPLAY.md": "d5b84a2aaae764cf5d01b4909e41f5a91d1e34b69e791386047f093694080744",
+    "hooks/course_display.py": "d00c0ca92f9e0b0b1781557e4268a96118b3705971784d38d5e4c84cd7169435",
+    "hooks/courses.py": "e2d139b8267ddc2d440354ee0332aa7b16ae60c9afa443f3ffcb79b24b98b7b8",
+    "hooks/course_pages.py": "aa307a08dfbfc9445905e7e2d3e73bde8b69139bbb61c4ee23626e19d1037db0",
+    "course-display.yml": "6252db1d5aa37219710d06644e4ba6b5cc0784689d288b3ba835b1310eb44262"
   }
 }
