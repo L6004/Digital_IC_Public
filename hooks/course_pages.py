@@ -36,6 +36,25 @@ def _prune_nav(items, excluded):
     return result
 
 
+def _add_code_navigation(items, home, source):
+    """Keep generated viewers inside their course's active navigation branch."""
+    if any(item == source or isinstance(item, dict) and source in item.values() for item in items or []):
+        return True
+    for index, item in enumerate(items or []):
+        if item == home:
+            items.insert(index + 1, {"参考代码": source})
+            return True
+        if isinstance(item, dict):
+            for title, target in item.items():
+                if isinstance(target, list):
+                    if _add_code_navigation(target, home, source):
+                        return True
+                elif target == home:
+                    item[title] = [home, {"参考代码": source}]
+                    return True
+    return False
+
+
 def _download(files, config, path):
     docs = Path(config["docs_dir"])
     relative = download_path(path, docs).relative_to(docs).as_posix()
@@ -118,11 +137,12 @@ def on_files(files, config):
         data_path = source.removesuffix(".md") + ".json"
         data = File.generated(config, data_path, content=json.dumps(manifest, ensure_ascii=False))
         files.append(data)
-        page.content_string = ('---\ntitle: 参考代码\nsearch:\n  exclude: true\nhide: [toc, navigation]\n---\n\n'
+        page.content_string = ('---\ntitle: 参考代码\nsearch:\n  exclude: true\nhide: [toc]\n---\n\n'
                                f'<h1>{escape(str(course["title"]))} · 参考代码</h1>\n'
                                f'<div class="course-code-viewer" data-manifest="{escape(data.url_relative_to(page), quote=True)}" tabindex="-1">'
                                '<p role="status">正在载入代码目录…</p></div>\n')
         files.append(page)
+        _add_code_navigation(config.get("nav"), course["path"].relative_to(docs).as_posix(), source)
     return files
 
 
