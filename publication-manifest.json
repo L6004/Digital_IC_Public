@@ -46,7 +46,7 @@
     "docs/assets/vendor/mermaid/LICENSE": "ec9fb67dcb25eccc416ed56e1aab819222c805a2a4bfe4cb19e7556bf2ffde80",
     "docs/assets/vendor/mermaid/mermaid.min.js": "198b19442f86f0b46a17e56d3abf744c3a28a3427e66fa8dada3b589a77babcc",
     "docs/assets/vendor/mermaid/VERSION": "215dbc43fe317191465acb7b1af2f714487f306c72926be785f4740396c11c7b",
-    "hooks/markdown_rendering.py": "80d5a41c4031a2e69e5fca48576621204ed04f09f15c43c89810b28c584a7c43",
+    "hooks/markdown_rendering.py": "7b5da034df2d5867d356d89a02da2de424e31e58380ae10bdf69a976863353c6",
     ".gitattributes": "218fff0b98914fd8e084ac5905beafa95ecb64fd45589233827b07597f938779",
     "docs/assets/stylesheets/course-viewer.css": "55a99d95ea090d5d3cc5f972c491c2b0624629826efdc77cda9a8dbbfe9cafbc",
     "docs/assets/vendor/code-viewer/viewer.js": "445047ada207d225f1add63d27d16e7625f546cf273a3121dd6006276dd9e3ce",
