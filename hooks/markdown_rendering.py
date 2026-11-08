@@ -1,11 +1,87 @@
 """Configure math and diagrams without changing the Markdown sources."""
 import re
+import xml.etree.ElementTree as ET
 
-from markdown.blockprocessors import BlockProcessor, ListIndentProcessor
+from markdown.blockprocessors import BlockProcessor, BlockQuoteProcessor, ListIndentProcessor
 from markdown.extensions import Extension
 from markdown.extensions.tables import TableProcessor
 from markdown.preprocessors import Preprocessor
 from pymdownx.superfences import fence_code_format
+
+
+class QuotedTabIndentation(Preprocessor):
+    """Count indentation tabs from the quote's content, as Typora does."""
+
+    quote = re.compile(r"^[ ]{0,3}>[ ]?")
+    fence = re.compile(r"^[ \t]*(`{3,}|~{3,})(.*)$")
+    raw = re.compile(r"^[ \t]*<(pre|code|script|style|textarea)(?:\s|>)", re.I)
+
+    def split_quotes(self, line, limit=None):
+        prefixes = []
+        while limit is None or len(prefixes) < limit:
+            match = self.quote.match(line)
+            if not match:
+                break
+            prefixes.append(match[0])
+            line = line[match.end():]
+            # Only structural indentation changes. Tabs in prose/TeX stay
+            # with Markdown's normal whitespace handling.
+            indent = re.match(r"[ \t]*", line)[0]
+            line = indent.expandtabs(self.md.tab_length) + line[len(indent):]
+        return ''.join(prefixes), line, len(prefixes)
+
+    def run(self, lines):
+        output = []
+        fenced = None
+        raw = None
+        for line in lines:
+            limit = fenced[2] if fenced else raw[1] if raw else None
+            prefix, content, depth = self.split_quotes(line, limit)
+            output.append(prefix + content)
+            if raw:
+                if re.search(r"</" + raw[0] + r"\s*>", content, re.I):
+                    raw = None
+                continue
+            match = self.fence.match(content)
+            if fenced:
+                if match and match[1][0] == fenced[0] and len(match[1]) >= fenced[1] and not match[2].strip():
+                    fenced = None
+            elif match:
+                fenced = (match[1][0], len(match[1]), depth)
+            else:
+                match = self.raw.match(content)
+                if match and not re.search(r"</" + match[1] + r"\s*>", content, re.I):
+                    raw = (match[1], depth)
+        return output
+
+
+class GitHubAlertProcessor(BlockQuoteProcessor):
+    """Reuse Material's accessible admonition styling for Typora/GitHub alerts."""
+
+    marker = re.compile(r"^[ ]{0,3}>[ ]?\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\][ \t]*(?:\n|$)", re.I)
+    styles = {'note': 'note', 'tip': 'tip', 'important': 'example',
+              'warning': 'warning', 'caution': 'danger'}
+
+    def test(self, parent, block):
+        return bool(self.marker.match(block))
+
+    def run(self, parent, blocks):
+        block = blocks.pop(0)
+        match = self.marker.match(block)
+        kind = match[1].lower()
+        alert = ET.SubElement(parent, 'div', {
+            'class': f'admonition {self.styles[kind]} github-alert-{kind}', 'role': 'note'})
+        ET.SubElement(alert, 'p', {'class': 'admonition-title'}).text = kind.capitalize()
+        content = '\n'.join(self.clean(line) for line in block[match.end():].split('\n'))
+        self.parser.state.set('blockquote')
+        self.parser.parseChunk(alert, content)
+        self.parser.state.reset()
+
+
+class QuotedContentExtension(Extension):
+    def extendMarkdown(self, md):
+        md.preprocessors.register(QuotedTabIndentation(md), 'quoted_tab_indentation', 31)
+        md.parser.blockprocessors.register(GitHubAlertProcessor(md.parser), 'github_alerts', 20.1)
 
 
 class MathBlockSpacing(Preprocessor):
@@ -138,7 +214,7 @@ class MathTableExtension(Extension):
 
 
 def on_config(config):
-    for extension_type in (MathBlockSpacingExtension, MathTableExtension):
+    for extension_type in (QuotedContentExtension, MathBlockSpacingExtension, MathTableExtension):
         if not any(isinstance(extension, extension_type) for extension in config["markdown_extensions"]):
             config["markdown_extensions"].append(extension_type())
     fences = config["mdx_configs"].setdefault("pymdownx.superfences", {}).setdefault("custom_fences", [])
