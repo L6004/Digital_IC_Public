@@ -85,4 +85,5 @@ extra_javascript:
 - assets/vendor/code-viewer/viewer.js
 hooks:
 - hooks/markdown_rendering.py
+- hooks/html_images.py
 - hooks/course_pages.py
