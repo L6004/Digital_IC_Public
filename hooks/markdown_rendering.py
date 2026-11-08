@@ -1,7 +1,7 @@
 """Configure math and diagrams without changing the Markdown sources."""
 import re
 
-from markdown.blockprocessors import BlockProcessor
+from markdown.blockprocessors import BlockProcessor, ListIndentProcessor
 from markdown.extensions import Extension
 from markdown.extensions.tables import TableProcessor
 from markdown.preprocessors import Preprocessor
@@ -10,17 +10,20 @@ from pymdownx.superfences import fence_code_format
 
 class MathBlockSpacing(Preprocessor):
     # At this priority fenced code and raw HTML are already protected by
-    # Markdown placeholders. Indented code is deliberately not matched.
-    delimiter = re.compile(r"^(?P<quote>(?:>[ \t]?)*)[ ]{0,3}\$\$[ \t]*$")
+    # Markdown placeholders. Preserve container indentation so list processors
+    # can remove it before the math renderer runs; standalone code stays code.
+    delimiter = re.compile(r"^(?P<quote>(?:[ ]{0,3}>[ \t]?)*)?(?P<indent>[ ]*)\$\$[ \t]*$")
 
     def run(self, lines):
         result = []
         opening = None
         for index, line in enumerate(lines):
+            if opening is not None and line.strip() and not line.startswith(opening[1]):
+                opening = None
             match = self.delimiter.fullmatch(line)
             if not match:
                 continue
-            quote = match.group("quote")
+            quote = (match.group("quote") or "") + match.group("indent")
             if opening is None:
                 opening = (index, quote)
             elif quote == opening[1]:
@@ -69,6 +72,27 @@ class MultilineMathBlockProcessor(BlockProcessor):
         return False
 
 
+class MathListIndentProcessor(ListIndentProcessor):
+    """Keep a multi-paragraph formula together when descending into a list."""
+
+    def run(self, parent, blocks):
+        level, _ = self.get_level(parent, blocks[0])
+        prefix = " " * (self.tab_length * level)
+        opening = re.compile(r"^" + prefix + r"\$\$[ \t]*(?:\n|$)")
+        closing = re.compile(r"^" + prefix + r"\$\$[ \t]*$", re.MULTILINE)
+        match = opening.match(blocks[0])
+        if match and not closing.search(blocks[0], match.end()):
+            for index, block in enumerate(blocks):
+                # A dedent ends this list's math candidate. Do not capture a
+                # later formula from another item, or indented literal code.
+                if any(line.strip() and not line.startswith(prefix) for line in block.splitlines()):
+                    break
+                if index and closing.search(block):
+                    blocks[:index + 1] = ["\n\n".join(blocks[:index + 1])]
+                    break
+        return super().run(parent, blocks)
+
+
 class MathBlockSpacingExtension(Extension):
     def extendMarkdown(self, md):
         md.preprocessors.register(MathBlockSpacing(md), "math_block_spacing", 15)
@@ -76,6 +100,7 @@ class MathBlockSpacingExtension(Extension):
             renderer = md.parser.blockprocessors["arithmatex-block"]
             md.parser.blockprocessors.register(
                 MultilineMathBlockProcessor(md.parser, renderer), "multiline_math_block", 79.95)
+            md.parser.blockprocessors.register(MathListIndentProcessor(md.parser), "indent", 90)
 
 
 class MathTableProcessor(TableProcessor):
@@ -119,4 +144,7 @@ def on_config(config):
     fences = config["mdx_configs"].setdefault("pymdownx.superfences", {}).setdefault("custom_fences", [])
     if not any(fence.get("name") == "mermaid" for fence in fences):
         fences.append({"name": "mermaid", "class": "mermaid", "format": fence_code_format})
+    languages = config["mdx_configs"].setdefault("pymdownx.highlight", {}).setdefault("extend_pygments_lang", [])
+    if not any(language.get("name") == "assembly" for language in languages):
+        languages.append({"name": "assembly", "lang": "gas"})
     return config
