@@ -1,6 +1,7 @@
 """Configure math and diagrams without changing the Markdown sources."""
 import re
 
+from markdown.blockprocessors import BlockProcessor
 from markdown.extensions import Extension
 from markdown.extensions.tables import TableProcessor
 from markdown.preprocessors import Preprocessor
@@ -37,9 +38,44 @@ class MathBlockSpacing(Preprocessor):
         return spaced
 
 
+class MultilineMathBlockProcessor(BlockProcessor):
+    """Pass a complete $$ block to Arithmatex, including internal blank lines."""
+
+    opening = re.compile(r"^\$\$[ \t]*(?:\n|$)")
+    closing = re.compile(r"^\$\$[ \t]*$", re.MULTILINE)
+
+    def __init__(self, parser, renderer):
+        super().__init__(parser)
+        self.renderer = renderer
+
+    def test(self, parent, block):
+        return bool(self.opening.match(block)) and not self.renderer.test(parent, block)
+
+    def run(self, parent, blocks):
+        for index, block in enumerate(blocks[1:], 1):
+            closing = self.closing.search(block)
+            if closing is None:
+                continue
+            complete = "\n\n".join([*blocks[:index], block[:closing.end()]])
+            if not self.renderer.test(parent, complete):
+                return False
+            # Keep the configured renderer's wrappers and TeX escaping behavior.
+            self.renderer.run(parent, [complete])
+            del blocks[:index + 1]
+            remainder = block[closing.end():].lstrip("\n")
+            if remainder:
+                blocks.insert(0, remainder)
+            return True
+        return False
+
+
 class MathBlockSpacingExtension(Extension):
     def extendMarkdown(self, md):
         md.preprocessors.register(MathBlockSpacing(md), "math_block_spacing", 15)
+        if "arithmatex-block" in md.parser.blockprocessors:
+            renderer = md.parser.blockprocessors["arithmatex-block"]
+            md.parser.blockprocessors.register(
+                MultilineMathBlockProcessor(md.parser, renderer), "multiline_math_block", 79.95)
 
 
 class MathTableProcessor(TableProcessor):
